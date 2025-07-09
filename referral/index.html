@@ -735,17 +735,36 @@
                 formData.append(`file_${index}`, file);
             });
 
-            // Here's where you'll integrate with Microsoft Forms API
-            // For now, we'll simulate a successful submission
             try {
-                // TODO: Replace with actual Microsoft Forms submission
-                // const response = await fetch('YOUR_MICROSOFT_FORMS_ENDPOINT', {
-                //     method: 'POST',
-                //     body: formData
-                // });
+                // Prepare the data for Power Automate
+                const powerAutomateData = {
+                    Location: document.querySelector('input[name="location"]:checked').value,
+                    DoctorName: document.getElementById('doctorName').value,
+                    DoctorPractice: document.getElementById('doctorPractice').value,
+                    DoctorEmail: document.getElementById('doctorEmail').value,
+                    DoctorPhone: document.getElementById('doctorPhone').value,
+                    PatientName: document.getElementById('patientName').value,
+                    PatientDOB: document.getElementById('patientDOB').value,
+                    PatientPhone: document.getElementById('patientPhone').value,
+                    PatientEmail: document.getElementById('patientEmail').value,
+                    MedicareNumber: document.getElementById('medicareNumber').value,
+                    MedicarePosition: document.getElementById('medicarePosition').value,
+                    MedicareExpiry: document.getElementById('medicareExpiry').value,
+                    ReferralReason: document.getElementById('referralReason').value
+                };
 
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Send to Power Automate
+                const response = await fetch('https://default305a0450892a49869dc365362e210f.c0.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/54f351d3da10493f875c1e02d572bf62/triggers/manual/paths/invoke/?api-version=1&tenantId=tId&environmentId=Default-305a0450-892a-4986-9dc3-65362e210fc0', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(powerAutomateData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Submission failed');
+                }
 
                 // Show success state
                 loadingContainer.style.display = 'none';
