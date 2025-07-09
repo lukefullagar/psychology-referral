@@ -11,20 +11,29 @@
             box-sizing: border-box;
         }
 
-        /* Custom font fallbacks - replace with Gelix and Gambarino when available */
+        /* Custom fonts */
+        @font-face {
+            font-family: 'Gellix';
+            src: url('fonts/Gellix%20Regular-e053.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Gambarino';
+            src: url('fonts/Gambarino-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: 'Gellix', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f5e7cc; /* Place Cream */
             min-height: 100vh;
             padding: 20px;
             line-height: 1.6;
             color: #3f1908; /* Place Burnt */
         }
-
-        /* To add custom fonts, include these in your HTML:
-        <link href="path-to-gelix-font.css" rel="stylesheet">
-        <link href="path-to-gambarino-font.css" rel="stylesheet">
-        Then update font-family: 'Gelix', sans-serif; */
 
         .container {
             max-width: 600px;
@@ -62,10 +71,10 @@
             width: 120px;
             height: auto;
             margin-bottom: 20px;
-            filter: brightness(0) invert(1); /* Makes logo white */
         }
 
         .header h1 {
+            font-family: 'Gambarino', serif;
             font-size: 32px;
             margin-bottom: 10px;
             font-weight: 300;
@@ -110,6 +119,7 @@
         }
 
         .section-title {
+            font-family: 'Gambarino', serif;
             font-size: 20px;
             color: #c95a28; /* Place Rust */
             margin-bottom: 20px;
@@ -310,6 +320,7 @@
         }
 
         .success-title {
+            font-family: 'Gambarino', serif;
             font-size: 28px;
             color: #3f1908;
             margin-bottom: 10px;
@@ -376,13 +387,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <!-- Place Psychology Logo - replace src with your actual logo path -->
-            <svg class="logo" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 20 L160 60 L160 120 L40 120 L40 60 Z" fill="white" opacity="0.9"/>
-                <text x="100" y="85" text-anchor="middle" font-size="36" font-weight="300" fill="white">Place</text>
-            </svg>
+            <!-- Place Psychology Logo -->
+            <img src="place-logo.png" alt="Place Psychology" class="logo">
             <h1>Patient Referral Form</h1>
-            <p>Secure referral to Place Psychology</p>
+            <p>Secure Referral to Place Psychology</p>
         </div>
 
         <form id="referralForm" class="form-container">
@@ -395,11 +403,11 @@
                     <div style="display: flex; gap: 20px; margin-top: 12px;">
                         <label style="display: flex; align-items: center; cursor: pointer; padding: 16px 24px; border: 2px solid #ecd099; border-radius: 12px; flex: 1; transition: all 0.3s ease;">
                             <input type="radio" name="location" value="dapto" required style="margin-right: 10px; width: auto;">
-                            <span style="font-size: 16px; font-weight: 500; color: #3f1908;">Place Psychology Dapto</span>
+                            <span style="font-size: 16px; font-weight: 500; color: #3f1908;">Dapto Clinic</span>
                         </label>
                         <label style="display: flex; align-items: center; cursor: pointer; padding: 16px 24px; border: 2px solid #ecd099; border-radius: 12px; flex: 1; transition: all 0.3s ease;">
                             <input type="radio" name="location" value="coledale" required style="margin-right: 10px; width: auto;">
-                            <span style="font-size: 16px; font-weight: 500; color: #3f1908;">Place Psychology Coledale</span>
+                            <span style="font-size: 16px; font-weight: 500; color: #3f1908;">Coledale Clinic</span>
                         </label>
                     </div>
                     <span class="error">Please select a practice location</span>
@@ -506,7 +514,7 @@
                     <div class="file-upload">
                         <input type="file" id="fileUpload" name="files" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
                         <label for="fileUpload" class="file-upload-label">
-                            📎 Click to upload Referral Letter or Mental Health Care Plan
+                            📎 Click to upload Referral Letter and Mental Health Care Plan
                         </label>
                     </div>
                     <div id="fileList" class="file-list"></div>
