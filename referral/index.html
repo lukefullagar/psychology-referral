@@ -166,6 +166,12 @@
             transition: all 0.3s ease;
             background: #fefefe;
             color: #3f1908;
+            font-family: 'Gellix', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        input::placeholder {
+            color: #999;
+            font-size: 15px;
         }
 
         input:focus,
@@ -489,8 +495,12 @@
 
                 <div class="form-group">
                     <label for="patientDOB">Date of Birth *</label>
-                    <input type="date" id="patientDOB" name="patientDOB" required>
-                    <span class="error">Please enter date of birth</span>
+                    <input type="text" id="patientDOB" name="patientDOB" 
+                           placeholder="DD/MM/YYYY" 
+                           maxlength="10"
+                           pattern="\d{2}/\d{2}/\d{4}"
+                           required>
+                    <span class="error">Please enter date of birth as DD/MM/YYYY</span>
                 </div>
 
                 <div class="form-group">
@@ -534,8 +544,12 @@
 
                 <div class="form-group">
                     <label for="medicareExpiry">Medicare Card Expiry *</label>
-                    <input type="month" id="medicareExpiry" name="medicareExpiry" required>
-                    <span class="error">Please enter Medicare card expiry date</span>
+                    <input type="text" id="medicareExpiry" name="medicareExpiry" 
+                           placeholder="MM/YYYY" 
+                           maxlength="7"
+                           pattern="\d{2}/\d{4}"
+                           required>
+                    <span class="error">Please enter expiry date as MM/YYYY</span>
                 </div>
             </div>
 
@@ -616,6 +630,49 @@
             });
         });
 
+        // Date of birth formatting
+        document.getElementById('patientDOB').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            let formatted = '';
+            
+            if (value.length > 0) {
+                // Format as DD/MM/YYYY
+                if (value.length <= 2) {
+                    formatted = value;
+                } else if (value.length <= 4) {
+                    formatted = value.slice(0, 2) + '/' + value.slice(2);
+                } else {
+                    formatted = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+                }
+            }
+            
+            e.target.value = formatted;
+            
+            // Validate date
+            if (formatted.length === 10) {
+                const parts = formatted.split('/');
+                const day = parseInt(parts[0]);
+                const month = parseInt(parts[1]);
+                const year = parseInt(parts[2]);
+                
+                const errorSpan = e.target.parentElement.querySelector('.error');
+                
+                // Basic validation
+                if (day < 1 || day > 31) {
+                    errorSpan.textContent = 'Day must be between 1 and 31';
+                    errorSpan.style.display = 'block';
+                } else if (month < 1 || month > 12) {
+                    errorSpan.textContent = 'Month must be between 1 and 12';
+                    errorSpan.style.display = 'block';
+                } else if (year < 1900 || year > new Date().getFullYear()) {
+                    errorSpan.textContent = 'Please enter a valid year';
+                    errorSpan.style.display = 'block';
+                } else {
+                    errorSpan.style.display = 'none';
+                }
+            }
+        });
+
         // Medicare number formatting
         document.getElementById('medicareNumber').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\s/g, '');
@@ -633,6 +690,48 @@
             }
             
             e.target.value = formatted;
+        });
+
+        // Medicare expiry formatting
+        document.getElementById('medicareExpiry').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            let formatted = '';
+            
+            if (value.length > 0) {
+                // Format as MM/YYYY
+                if (value.length <= 2) {
+                    formatted = value;
+                } else {
+                    formatted = value.slice(0, 2) + '/' + value.slice(2, 6);
+                }
+            }
+            
+            e.target.value = formatted;
+            
+            // Validate expiry
+            if (formatted.length === 7) {
+                const parts = formatted.split('/');
+                const month = parseInt(parts[0]);
+                const year = parseInt(parts[1]);
+                
+                const errorSpan = e.target.parentElement.querySelector('.error');
+                
+                if (month < 1 || month > 12) {
+                    errorSpan.textContent = 'Month must be between 1 and 12';
+                    errorSpan.style.display = 'block';
+                } else {
+                    // Check if expired
+                    const currentDate = new Date();
+                    const expiryDate = new Date(year, month - 1);
+                    
+                    if (expiryDate < currentDate) {
+                        errorSpan.textContent = 'Medicare card appears to be expired';
+                        errorSpan.style.display = 'block';
+                    } else {
+                        errorSpan.style.display = 'none';
+                    }
+                }
+            }
         });
 
         // File upload handling
@@ -755,20 +854,6 @@
                 isValid = false;
             }
 
-            // Validate Medicare expiry is not in the past
-            const expiryField = document.getElementById('medicareExpiry');
-            const expiryError = expiryField.parentElement.querySelector('.error');
-            if (expiryField.value) {
-                const expiryDate = new Date(expiryField.value);
-                const currentDate = new Date();
-                currentDate.setDate(1); // Set to first of month for fair comparison
-                if (expiryDate < currentDate) {
-                    expiryError.style.display = 'block';
-                    expiryError.textContent = 'Medicare card appears to be expired';
-                    isValid = false;
-                }
-            }
-
             if (!isValid) return;
 
             // Show loading state
@@ -784,6 +869,16 @@
             });
 
             try {
+                // Convert date format from DD/MM/YYYY to YYYY-MM-DD for Power Automate
+                const dobValue = document.getElementById('patientDOB').value;
+                const dobParts = dobValue.split('/');
+                const formattedDOB = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
+                
+                // Convert Medicare expiry from MM/YYYY to YYYY-MM
+                const expiryValue = document.getElementById('medicareExpiry').value;
+                const expiryParts = expiryValue.split('/');
+                const formattedExpiry = `${expiryParts[1]}-${expiryParts[0]}`;
+                
                 // Prepare the data for Power Automate
                 const powerAutomateData = {
                     Location: document.querySelector('input[name="location"]:checked').value,
@@ -792,12 +887,12 @@
                     DoctorEmail: document.getElementById('doctorEmail').value,
                     DoctorPhone: document.getElementById('doctorPhone').value,
                     PatientName: document.getElementById('patientName').value,
-                    PatientDOB: document.getElementById('patientDOB').value,
+                    PatientDOB: formattedDOB,
                     PatientPhone: document.getElementById('patientPhone').value,
                     PatientEmail: document.getElementById('patientEmail').value,
                     MedicareNumber: document.getElementById('medicareNumber').value,
                     MedicarePosition: document.getElementById('medicarePosition').value,
-                    MedicareExpiry: document.getElementById('medicareExpiry').value,
+                    MedicareExpiry: formattedExpiry,
                     ReferralReason: document.getElementById('referralReason').value
                 };
 
