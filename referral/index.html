@@ -398,6 +398,80 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
+        /* Service Timeline Styles */
+        .service-timeline {
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 48px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #ecd099;
+        }
+
+        .timeline-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #d66f2a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-right: 20px;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .timeline-content h4 {
+            margin: 0 0 8px 0;
+            color: #3f1908;
+            font-size: 16px;
+        }
+
+        .timeline-content p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .no-waitlist-banner {
+            background: linear-gradient(135deg, #f5e7cc 0%, #ecd099 100%);
+            border: 2px solid #d66f2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .no-waitlist-banner strong {
+            color: #c95a28;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .no-waitlist-banner p {
+            margin: 0;
+            color: #3f1908;
+            font-size: 15px;
+        }
+
         /* Responsive design */
         @media (max-width: 640px) {
             .container {
@@ -607,6 +681,51 @@
                 <br><br>
                 You will receive a confirmation email shortly.
             </p>
+            
+            <!-- Service Promise Timeline -->
+            <div class="service-timeline">
+                <h3 style="color: #c95a28; margin: 30px 0 20px; font-size: 20px;">What Happens Next:</h3>
+                
+                <div class="timeline-item">
+                    <div class="timeline-badge" style="background: #a9d0c6;">✓</div>
+                    <div class="timeline-content">
+                        <h4>Within 2 Hours</h4>
+                        <p>• Automated confirmation email sent to your practice<br>
+                        • Patient added to our priority booking system</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-badge" style="background: #ecd099;">24h</div>
+                    <div class="timeline-content">
+                        <h4>Within 24 Hours</h4>
+                        <p>• Patient contacted by phone (3 attempts)<br>
+                        • Appointment scheduled<br>
+                        • Confirmation sent to you</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-badge" style="background: #d66f2a;">7d</div>
+                    <div class="timeline-content">
+                        <h4>Within 7 Days</h4>
+                        <p>• Initial appointment completed<br>
+                        • Comprehensive intake report sent<br>
+                        • Treatment plan communicated</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="no-waitlist-banner">
+                <strong>🎯 No Waitlists, No Delays</strong>
+                <p>Unlike many services, we maintain capacity for new referrals. Your patient will be seen within days, not weeks.</p>
+            </div>
+            
+            <div style="margin: 30px 0; padding: 20px; background: #f5e7cc; border-radius: 12px;">
+                <p style="margin: 0; font-size: 14px;"><strong>Direct GP Support Line:</strong> 02 4210 5206<br>
+                <em style="font-size: 13px; color: #666;">For urgent consultations or complex cases</em></p>
+            </div>
+            
             <a href="https://placepsychology.com.au" class="practice-link" target="_blank">
                 Learn More About Our Practice
             </a>
